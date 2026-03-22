@@ -120,21 +120,21 @@ const books = ref([
     id: 1,
     title: 'Война и мир',
     description: 'Роман-эпопея Льва Толстого',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Voina_i_mir.jpg',
+    image: 'https://avatars.mds.yandex.net/i?id=c774b41b3fccb185dba905dbd95a2b50ca38094e-4842116-images-thumbs&n=13',
     date: new Date('2024-01-15')
   },
   {
     id: 2,
     title: 'Преступление и наказание',
     description: 'Роман Фёдора Достоевского',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Dostoevsky_Crime_and_Punishment.jpg',
+    image: 'https://avatars.mds.yandex.net/i?id=79b6df7ca093730c7e5e23e5c2f00fddd4a13366-15416875-images-thumbs&n=13',
     date: new Date('2024-02-20')
   },
   {
     id: 3,
     title: 'Мастер и Маргарита',
     description: 'Роман Михаила Булгакова',
-    image: 'https://upload.wikimedia.org/wikipedia/ru/1/1f/Master_i_Margarita.jpg',
+    image: 'https://avatars.mds.yandex.net/i?id=15aad93a4f168b9076fbe1f44a3c62160a162cb8-5280212-images-thumbs&n=13',
     date: new Date('2024-03-10')
   }
 ])
