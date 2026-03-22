@@ -1,94 +1,113 @@
 <template>
-  <div class="container mt-5">
-    <h1 class="text-center mb-4">Моя коллекция книг</h1>
-    
-    <!-- Форма добавления книги -->
-    <div class="row">
-      <div class="col-md-8 offset-md-2">
-        <form @submit.prevent="addBook" class="card p-4 mb-4">
-          <h4 class="mb-3">Добавить новую книгу</h4>
-          <div class="mb-3">
-            <label class="form-label">Название</label>
-            <input
-              v-model="newBook.title"
-              type="text"
-              class="form-control"
-              placeholder="Введите название книги"
-              required
-            >
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Описание</label>
-            <textarea
-              v-model="newBook.description"
-              class="form-control"
-              placeholder="Введите описание книги"
-              rows="3"
-            ></textarea>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">URL изображения</label>
-            <input
-              v-model="newBook.image"
-              type="url"
-              class="form-control"
-              placeholder="https://example.com/image.jpg"
-            >
-          </div>
-          <button class="btn btn-primary" type="submit">Добавить</button>
-        </form>
+  <div class="min-vh-100 py-5" style="background-color: #fafafa;">
+    <div class="container" style="max-width: 800px;">
+      
+      <!-- Header -->
+      <div class="text-center mb-5">
+        <h1 class="fw-light" style="font-size: 2rem; color: #333;">Моя коллекция книг</h1>
+        <p class="text-muted">Добавьте и управляйте своей коллекцией</p>
       </div>
-    </div>
-    
-    <!-- Сортировка -->
-    <div class="row mb-4">
-      <div class="col-md-6 offset-md-3">
-        <div class="d-flex align-items-center">
-          <label class="form-label me-2 mb-0">Сортировать по:</label>
-          <select v-model="sortBy" class="form-select" style="width: auto;">
-            <option value="title">Названию</option>
-            <option value="date">Дате добавления</option>
-          </select>
+      
+      <!-- Add Form -->
+      <div class="card border-0 shadow-sm mb-5">
+        <div class="card-body p-4">
+          <h5 class="card-title mb-4 fw-light">Добавить книгу</h5>
+          <form @submit.prevent="addBook">
+            <div class="mb-3">
+              <input
+                v-model="newBook.title"
+                type="text"
+                class="form-control border-0 bg-light"
+                placeholder="Название книги"
+                required
+              >
+            </div>
+            <div class="mb-3">
+              <textarea
+                v-model="newBook.description"
+                class="form-control border-0 bg-light"
+                placeholder="Описание (необязательно)"
+                rows="2"
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <input
+                v-model="newBook.image"
+                type="url"
+                class="form-control border-0 bg-light"
+                placeholder="URL изображения (необязательно)"
+              >
+            </div>
+            <button class="btn btn-dark w-100" type="submit">Добавить</button>
+          </form>
         </div>
       </div>
-    </div>
-    
-    <!-- Карточки книг -->
-    <div class="row">
-      <div
-        v-for="book in sortedBooks"
-        :key="book.id"
-        class="col-md-4 mb-4"
-      >
-        <div class="card h-100">
-          <img
-            v-if="book.image"
-            :src="book.image"
-            class="card-img-top"
-            :alt="book.title"
-            style="height: 200px; object-fit: cover;"
-          >
-          <div v-else class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
-            <span class="text-white">Нет изображения</span>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ book.title }}</h5>
-            <p v-if="book.description" class="card-text">{{ book.description }}</p>
-            <p class="card-text"><small class="text-muted">Добавлено: {{ formatDate(book.date) }}</small></p>
-            <button
-              @click="removeBook(book.id)"
-              class="btn btn-sm btn-danger"
-            >
-              Удалить
-            </button>
+      
+      <!-- Sort & Books Grid -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <span class="text-muted">{{ sortedBooks.length }} книг</span>
+        <select v-model="sortBy" class="form-select form-select-sm border-0 bg-transparent" style="width: auto;">
+          <option value="date">По дате</option>
+          <option value="title">По названию</option>
+        </select>
+      </div>
+      
+      <!-- Books Grid -->
+      <div class="row g-4">
+        <div
+          v-for="book in sortedBooks"
+          :key="book.id"
+          class="col-12"
+        >
+          <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+              <div class="d-flex gap-4 align-items-start">
+                <!-- Image -->
+                <div 
+                  v-if="book.image" 
+                  class="flex-shrink-0"
+                  style="width: 100px; height: 140px; overflow: hidden; border-radius: 4px;"
+                >
+                  <img 
+                    :src="book.image" 
+                    :alt="book.title"
+                    class="w-100 h-100"
+                    style="object-fit: cover;"
+                  >
+                </div>
+                <div 
+                  v-else 
+                  class="flex-shrink-0 d-flex align-items-center justify-content-center bg-light"
+                  style="width: 100px; height: 140px; border-radius: 4px;"
+                >
+                  <span class="text-muted small">Нет фото</span>
+                </div>
+                
+                <!-- Content -->
+                <div class="flex-grow-1">
+                  <h5 class="mb-2" style="font-weight: 500;">{{ book.title }}</h5>
+                  <p v-if="book.description" class="text-muted mb-2" style="font-size: 0.9rem;">{{ book.description }}</p>
+                  <p class="text-muted mb-0" style="font-size: 0.8rem;">{{ formatDate(book.date) }}</p>
+                </div>
+                
+                <!-- Delete -->
+                <button
+                  @click="removeBook(book.id)"
+                  class="btn btn-sm btn-outline-secondary flex-shrink-0"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-    <!-- Сообщение если коллекция пуста -->
-    <div v-if="sortedBooks.length === 0" class="text-center mt-5">
-      <p class="text-muted">Коллекция пуста. Добавьте первую книгу!</p>
+      
+      <!-- Empty State -->
+      <div v-if="sortedBooks.length === 0" class="text-center py-5">
+        <p class="text-muted">Коллекция пуста</p>
+      </div>
+      
     </div>
   </div>
 </template>
@@ -100,21 +119,21 @@ const books = ref([
   {
     id: 1,
     title: 'Война и мир',
-    description: 'Роман-эпопея Льва Николаевича Толстого',
+    description: 'Роман-эпопея Льва Толстого',
     image: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/Voina_i_mir.jpg',
     date: new Date('2024-01-15')
   },
   {
     id: 2,
     title: 'Преступление и наказание',
-    description: 'Психологический и философский роман Фёдора Достоевского',
+    description: 'Роман Фёдора Достоевского',
     image: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Dostoevsky_Crime_and_Punishment.jpg',
     date: new Date('2024-02-20')
   },
   {
     id: 3,
     title: 'Мастер и Маргарита',
-    description: 'Мистический роман Михаила Булгакова',
+    description: 'Роман Михаила Булгакова',
     image: 'https://upload.wikimedia.org/wikipedia/ru/1/1f/Master_i_Margarita.jpg',
     date: new Date('2024-03-10')
   }
@@ -167,13 +186,6 @@ const formatDate = (date) => {
 
 <style>
 body {
-  background-color: #f8f9fa;
-}
-.card {
-  transition: transform 0.2s;
-}
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 </style>
